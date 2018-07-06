@@ -56,7 +56,7 @@ To install the necessary libraries
 
 ### Coding Standards
 
-See `PEP 8 Style Guide for Python Code <https://www.python.org/dev/peps/pep-0008/>`_ for complete details on the coding standards.
+See [PEP 8 Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/) for complete details on the coding standards.
 
 To run checks on the code to ensure code is in compliance
 
