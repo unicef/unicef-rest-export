@@ -12,7 +12,7 @@ class BookListSerializer(ExportSerializer):
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ("__all__")
+        fields = "__all__"
         list_serializer_class = BookListSerializer
 
 
@@ -21,7 +21,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ("__all__")
+        fields = "__all__"
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
@@ -33,5 +33,5 @@ class AuthorListSerializer(serializers.ModelSerializer):
 class AuthorInvalidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ("__all__")
+        fields = "__all__"
         list_serializer_class = AuthorListSerializer
