@@ -1,6 +1,6 @@
 [run]
 branch = True
-source = unicef_notification
+source = unicef_rest_export
 include =
 
 omit =  **/__init__.py
