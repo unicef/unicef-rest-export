@@ -1,6 +1,6 @@
 # UNICEF Rest Export
 
-Django Rest Framework data export package
+Django Rest Framework data export package that handles export/rendering to JSON, CSV, XLS, and HTML
 
 
 ## Installation
@@ -20,7 +20,29 @@ Add ``unicef_rest_export`` to ``INSTALLED_APPS`` in settings
 
 ## Usage
 
-TODO
+A sample model view;
+
+    class AuthorView(ExportView):
+        queryset = Author.objects.all()
+        serializer_class = serializers.AuthorSerializer
+
+
+A sample model viewset;
+
+    class AuthorViewSet(ExportViewSet):
+        queryset = Author.objects.all()
+        serializer_class = serializers.AuthorSerializer
+
+
+To override or limit the renderers allowed, add ``EXPORT_RENDERERS`` to settings.
+The current default is;
+
+    EXPORT_RENDERERS = (
+        "unicef_rest_export.renderers.ExportHTMLRenderer",
+        "unicef_rest_export.renderers.ExportCSVRenderer",
+        "unicef_rest_export.renderers.ExportJSONRenderer",
+        "unicef_rest_export.renderers.ExportExcelRenderer",
+    )
 
 
 ## Contributing
@@ -54,3 +76,8 @@ Coverage report is viewable in `build/coverage` directory, and can be generated 
 
  - Continuos Integration - https://circleci.com/gh/unicef/unicef-rest-export/tree/develop
  - Source Code - https://github.com/unicef/unicef-rest-export
+
+
+## Thanks to
+
+[django-rest-pandas](https://github.com/wq/django-rest-pandas) as a lot of the code was borrowed from that package.
