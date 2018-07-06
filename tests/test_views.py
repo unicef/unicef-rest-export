@@ -59,6 +59,18 @@ def test_export_view_xls(api_client, author):
     assert response.status_code == 200
 
 
+def test_export_view_xlsx_empty(api_client):
+    url = "{}?format=xlsx".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_xlsx(api_client, author):
+    url = "{}?format=xlsx".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
 def test_export_view_csv_empty(api_client):
     url = "{}?format=csv".format(reverse("sample:author-view"))
     response = api_client.get(url)
@@ -83,7 +95,7 @@ def test_export_viewset(api_client, author):
     assert str.encode(author.first_name) in response.content
 
 
-def test_export_view_meta_json(api_client, book):
+def test_export_view_foreignkey_json(api_client, book):
     url = "{}?format=json".format(reverse("sample:book-view"))
     response = api_client.get(url)
     assert response.status_code == 200
@@ -94,7 +106,25 @@ def test_export_view_meta_json(api_client, book):
     assert data["author"] == book.author.pk
 
 
-def test_export_view_many_json(api_client, book):
+def test_export_view_foreignkey_xls(api_client, book):
+    url = "{}?format=xls".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_foreignkey_xlsx(api_client, book):
+    url = "{}?format=xlsx".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_foreignkey_csv(api_client, book):
+    url = "{}?format=csv".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_subdata_json(api_client, book):
     url = "{}?format=json".format(reverse("sample:author-view"))
     response = api_client.get(url)
     assert response.status_code == 200
@@ -108,6 +138,24 @@ def test_export_view_many_json(api_client, book):
     assert data_book["id"] == book.pk
     assert data_book["name"] == book.name
     assert data_book["author"] == book.author.pk
+
+
+def test_export_view_subdata_xls(api_client, book):
+    url = "{}?format=xls".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_subdata_xlsx(api_client, book):
+    url = "{}?format=xlsx".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_subdata_csv(api_client, book):
+    url = "{}?format=csv".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
 
 
 def test_export_view_invalid(api_client, author):

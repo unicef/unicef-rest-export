@@ -13,6 +13,7 @@ if EXPORT_RENDERERS is None:
     EXPORT_RENDERERS = (
         "unicef_rest_export.renderers.ExportCSVRenderer",
         "unicef_rest_export.renderers.ExportJSONRenderer",
+        "unicef_rest_export.renderers.ExportOpenXMLRenderer",
         "unicef_rest_export.renderers.ExportExcelRenderer",
     )
     if "unicef_rest_export" in settings.INSTALLED_APPS:

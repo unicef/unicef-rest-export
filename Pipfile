@@ -8,6 +8,7 @@ tablib = "*"
 djangorestframework = "*"
 django = "*"
 "psycopg2-binary" = "*"
+openpyxl = "<2.5"  # https://github.com/kennethreitz/tablib/issues/331
 
 [dev-packages]
 "flake8" = "*"

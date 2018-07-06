@@ -145,7 +145,13 @@ class ExportJSONRenderer(ExportBaseRenderer):
         }
 
 
-class ExportExcelRenderer(ExportFileRenderer):
+class ExportOpenXMLRenderer(ExportFileRenderer):
     """Renders dataset as Excel (.xlsx)"""
     media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  # noqa
+    format = "xlsx"
+
+
+class ExportExcelRenderer(ExportFileRenderer):
+    """Renders dataset as Excel (.xls)"""
+    media_type = "application/vnd.ms-excel"
     format = "xls"
