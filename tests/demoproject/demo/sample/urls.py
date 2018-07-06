@@ -15,6 +15,11 @@ urlpatterns = [
     ),
     url(r'^author/$', views.AuthorView.as_view(), name='author-view'),
     url(
+        r'^author/transform/$',
+        views.AuthorTransformView.as_view(),
+        name='author-transform'
+    ),
+    url(
         r'^author/invalid/$',
         views.AuthorInvalidView.as_view(),
         name='author-invalid'

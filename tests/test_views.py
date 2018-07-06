@@ -124,8 +124,8 @@ def test_export_view_foreignkey_csv(api_client, book):
     assert response.status_code == 200
 
 
-def test_export_view_subdata_json(api_client, book):
-    url = "{}?format=json".format(reverse("sample:author-view"))
+def test_export_view_transform_json(api_client, book):
+    url = "{}?format=json".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
     assert len(response.json()) == 1
@@ -133,27 +133,23 @@ def test_export_view_subdata_json(api_client, book):
     assert data["id"] == book.author.pk
     assert data["first_name"] == book.author.first_name
     assert data["last_name"] == book.author.last_name
-    assert len(data["books"]) == 1
-    data_book = data["books"][0]
-    assert data_book["id"] == book.pk
-    assert data_book["name"] == book.name
-    assert data_book["author"] == book.author.pk
+    assert data["books"] == [book.name]
 
 
-def test_export_view_subdata_xls(api_client, book):
-    url = "{}?format=xls".format(reverse("sample:author-view"))
+def test_export_view_transform_xls(api_client, book):
+    url = "{}?format=xls".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
 
 
-def test_export_view_subdata_xlsx(api_client, book):
-    url = "{}?format=xlsx".format(reverse("sample:author-view"))
+def test_export_view_transform_xlsx(api_client, book):
+    url = "{}?format=xlsx".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
 
 
-def test_export_view_subdata_csv(api_client, book):
-    url = "{}?format=csv".format(reverse("sample:author-view"))
+def test_export_view_transform_csv(api_client, book):
+    url = "{}?format=csv".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
 

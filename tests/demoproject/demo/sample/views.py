@@ -17,6 +17,18 @@ class AuthorView(ExportView):
     serializer_class = serializers.AuthorSerializer
 
 
+class AuthorTransformView(ExportView):
+    queryset = Author.objects.all()
+    serializer_class = serializers.AuthorSerializer
+
+    def transform_books(self, data):
+        return [d["name"] for d in data]
+
+    def transform_dataset(self, dataset):
+        dataset.add_formatter("books", self.transform_books)
+        return dataset
+
+
 class AuthorInvalidView(ExportView):
     queryset = Author.objects.all()
     serializer_class = serializers.AuthorInvalidSerializer

@@ -44,6 +44,19 @@ The current default is;
         "unicef_rest_export.renderers.ExportExcelRenderer",
     )
 
+The following is a sample of transforming data;
+
+    class AuthorTransformView(ExportView):
+        queryset = Author.objects.all()
+        serializer_class = serializers.AuthorSerializer
+
+        def transform_books(self, data):
+            return [d["name"] for d in data]
+
+        def transform_dataset(self, dataset):
+            dataset.add_formatter("books", self.transform_books)
+            return dataset
+
 
 ## Contributing
 
