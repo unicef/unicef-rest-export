@@ -83,6 +83,18 @@ def test_export_view_csv(api_client, author):
     assert response.status_code == 200
 
 
+def test_export_view_pdf_empty(api_client):
+    url = "{}?format=pdf".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_pdf(api_client, author):
+    url = "{}?format=pdf".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
 def test_export_view_invalid_format(api_client, author):
     url = "{}?format=wrong".format(reverse("sample:author-view"))
     response = api_client.get(url)
@@ -124,6 +136,12 @@ def test_export_view_foreignkey_csv(api_client, book):
     assert response.status_code == 200
 
 
+def test_export_view_foreignkey_pdf(api_client, book):
+    url = "{}?format=pdf".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
 def test_export_view_transform_json(api_client, book):
     url = "{}?format=json".format(reverse("sample:author-transform"))
     response = api_client.get(url)
@@ -150,6 +168,12 @@ def test_export_view_transform_xlsx(api_client, book):
 
 def test_export_view_transform_csv(api_client, book):
     url = "{}?format=csv".format(reverse("sample:author-transform"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_transform_pdf(api_client, book):
+    url = "{}?format=pdf".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
 

@@ -1,7 +1,10 @@
 import os
-from io import StringIO
+from io import BytesIO, StringIO
 from tempfile import mkstemp
 
+from reportlab.lib.pagesizes import inch, letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
 from rest_framework import status
 from rest_framework.renderers import BaseRenderer, TemplateHTMLRenderer
 from tablib import Dataset
@@ -155,3 +158,41 @@ class ExportExcelRenderer(ExportFileRenderer):
     """Renders dataset as Excel (.xls)"""
     media_type = "application/vnd.ms-excel"
     format = "xls"
+
+
+class ExportPDFRenderer(ExportFileRenderer):
+    """Renders dataset as PDF (.pdf)"""
+    media_type = "application/pdf"
+    format = "pdf"
+
+    def export_set(self, dataset):
+        data = []
+        if dataset.headers is not None:
+            data.append(
+                [item if item is not None else '' for item in dataset.headers]
+            )
+
+        stream = BytesIO()
+        doc = SimpleDocTemplate(stream, pagesize=letter)
+        elements = []
+
+        formatted = dataset._package()
+        if formatted != [[]]:
+            for row in formatted:
+                data.append([str(v) for _, v in row.items()])
+
+            t = Table(data)
+            t.setStyle(TableStyle([
+                # action/format, from-cell, to-cell, format
+                ('FONTSIZE', (0, 0), (0, -1), 14),
+                ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+            ]))
+            elements.append(t)
+
+        doc.build(elements)
+        return stream.getvalue()
+
+    def render_dataset(self, data, *args, **kwargs):
+        with open(self.filename, "wb") as fp:
+            fp.write(self.export_set(data))

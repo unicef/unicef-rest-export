@@ -15,6 +15,7 @@ if EXPORT_RENDERERS is None:
         "unicef_rest_export.renderers.ExportJSONRenderer",
         "unicef_rest_export.renderers.ExportOpenXMLRenderer",
         "unicef_rest_export.renderers.ExportExcelRenderer",
+        "unicef_rest_export.renderers.ExportPDFRenderer",
     )
     if "unicef_rest_export" in settings.INSTALLED_APPS:
         DEFAULT_TEMPLATE = True
