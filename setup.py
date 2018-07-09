@@ -4,11 +4,15 @@ import ast
 import codecs
 import os.path
 import re
+import subprocess
 import sys
 from codecs import open
-from setuptools import setup, find_packages
-from setuptools.command.install import install
 from distutils import log
+from distutils.errors import DistutilsError
+
+from setuptools import find_packages, setup
+from setuptools.command.install import install
+from setuptools.command.sdist import sdist as BaseSDistCommand
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 init = os.path.join(ROOT, 'src', 'unicef_rest_export', '__init__.py')
@@ -30,11 +34,28 @@ def read(*files):
     return "\n".join(filter(lambda l:not l.startswith('-'), content))
 
 
-class UNICEFRestExportInstall(install):
+def check(cmd, filename):
+    out = subprocess.run(cmd, stdout=subprocess.PIPE)
+    f = os.path.join('src', 'requirements', filename)
+    reqs = codecs.open(os.path.join(ROOT, f), 'r').readlines()
+    existing = {re.split("(==|>=|<=>|<|)", name[:-1])[0] for name in reqs}
+    declared = {re.split("(==|>=|<=>|<|)", name)[0] for name in out.stdout.decode('utf8').split("\n") if name and not name.startswith('-')}
+
+    if existing != declared:
+        msg = """Requirements file not updated.
+Run 'make requiremets'
+""".format(' '.join(cmd), f)
+        raise DistutilsError(msg)
+
+class SDistCommand(BaseSDistCommand):
+
     def run(self):
-        ret = super().run()
-        log.info("This product needs pipenv for a proper installation")
-        return ret
+        checks = {'install.pip': ['pipenv', 'lock', '--requirements'],
+                  'testing.pip': ['pipenv', 'lock', '-d', '--requirements']}
+
+        for filename, cmd in checks.items():
+            check (cmd, filename)
+        super().run()
 
 
 class VerifyTagVersion(install):
@@ -73,7 +94,7 @@ setup(name=NAME,
           'Intended Audience :: Developers'],
       scripts=[],
       cmdclass={
-          "install": UNICEFRestExportInstall,
+          'sdist': SDistCommand,
           "verify": VerifyTagVersion,
       }
 )

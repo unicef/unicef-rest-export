@@ -1,6 +1,15 @@
--i https://pypi.org/simple
-django>=1.10.8
-djangorestframework>=3.8.2
-openpyxl<2.5
-psycopg2-binary>=2.7.5
-tablib>=0.12.1
+django
+djangorestframework
+et-xmlfile
+jdcal
+odfpy
+openpyxl
+pillow
+psycopg2-binary
+pytz
+pyyaml
+reportlab
+tablib
+unicodecsv
+xlrd
+xlwt
