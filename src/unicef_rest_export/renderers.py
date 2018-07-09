@@ -2,9 +2,9 @@ import os
 from io import BytesIO, StringIO
 from tempfile import mkstemp
 
-from reportlab.lib.pagesizes import inch, letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib import colors
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from rest_framework import status
 from rest_framework.renderers import BaseRenderer, TemplateHTMLRenderer
 from tablib import Dataset
