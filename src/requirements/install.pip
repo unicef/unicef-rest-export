@@ -3,7 +3,7 @@ djangorestframework
 et-xmlfile
 jdcal
 odfpy
-openpyxl
+openpyxl<2.5
 pillow
 psycopg2-binary
 pytz
