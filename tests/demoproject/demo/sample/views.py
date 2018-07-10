@@ -25,7 +25,7 @@ class AuthorTransformView(ExportView):
         return [d["name"] for d in data]
 
     def transform_dataset(self, dataset):
-        dataset.add_formatter("books", self.transform_books)
+        dataset.add_formatter("Books", self.transform_books)
         return dataset
 
 
