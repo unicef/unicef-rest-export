@@ -171,10 +171,10 @@ class ExportPDFRenderer(ExportFileRenderer):
         doc = SimpleDocTemplate(stream, pagesize=landscape(letter))
         styles = getSampleStyleSheet()
         styleCell = styles["Normal"]
-        styleCell.fontSize = 6
+        styleCell.fontSize = 7
         elements = []
 
-        columns_per_page = 10
+        columns_per_page = 9
 
         if dataset.headers:
             # slice the data into a set number of columns
@@ -182,17 +182,19 @@ class ExportPDFRenderer(ExportFileRenderer):
             formatted = dataset._package()
             for start in range(0, len(dataset.headers), columns_per_page):
                 end = start + columns_per_page
-                data = [
+                data = [['Row'] + [
                     item if item is not None else ''
                     for item in dataset.headers[start:end]
-                ]
+                ]]
 
+                row_num = 1
                 for row in formatted:
                     d = [
                         Paragraph(str(v), styleCell)
                         for _, v in row.items()
                     ]
-                    data.append(d[start:end])
+                    data.append([row_num] + d[start:end])
+                    row_num += 1
 
                 t = Table(data)
                 t.setStyle(TableStyle([
