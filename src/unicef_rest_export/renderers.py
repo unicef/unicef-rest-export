@@ -3,8 +3,9 @@ from io import BytesIO, StringIO
 from tempfile import mkstemp
 
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib.pagesizes import landscape, letter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Table, TableStyle
 from rest_framework import status
 from rest_framework.renderers import BaseRenderer, TemplateHTMLRenderer
 from tablib import Dataset
@@ -166,29 +167,42 @@ class ExportPDFRenderer(ExportFileRenderer):
     format = "pdf"
 
     def export_set(self, dataset):
-        data = []
-        if dataset.headers is not None:
-            data.append(
-                [item if item is not None else '' for item in dataset.headers]
-            )
-
         stream = BytesIO()
-        doc = SimpleDocTemplate(stream, pagesize=letter)
+        doc = SimpleDocTemplate(stream, pagesize=landscape(letter))
+        styles = getSampleStyleSheet()
+        styleCell = styles["Normal"]
+        styleCell.fontSize = 6
         elements = []
 
-        formatted = dataset._package()
-        if formatted != [[]]:
-            for row in formatted:
-                data.append([str(v) for _, v in row.items()])
+        columns_per_page = 10
 
-            t = Table(data)
-            t.setStyle(TableStyle([
-                # action/format, from-cell, to-cell, format
-                ('FONTSIZE', (0, 0), (0, -1), 14),
-                ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-            ]))
-            elements.append(t)
+        if dataset.headers:
+            # slice the data into a set number of columns
+            # in order to fit on the page
+            formatted = dataset._package()
+            for start in range(0, len(dataset.headers), columns_per_page):
+                end = start + columns_per_page
+                data = [
+                    item if item is not None else ''
+                    for item in dataset.headers[start:end]
+                ]
+
+                for row in formatted:
+                    d = [
+                        Paragraph(str(v), styleCell)
+                        for _, v in row.items()
+                    ]
+                    data.append(d[start:end])
+
+                t = Table(data)
+                t.setStyle(TableStyle([
+                    # action/format, from-cell, to-cell, format
+                    ('VALIGN', (0, 0), (-1, -1), "TOP"),
+                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                ]))
+                elements.append(t)
+                elements.append(PageBreak())
 
         doc.build(elements)
         return stream.getvalue()

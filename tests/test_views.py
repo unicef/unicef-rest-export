@@ -41,10 +41,10 @@ def test_export_view_json(api_client, author):
     assert response.status_code == 200
     assert len(response.json()) == 1
     data = response.json()[0]
-    assert data["id"] == author.pk
-    assert data["first_name"] == author.first_name
-    assert data["last_name"] == author.last_name
-    assert len(data["books"]) == 0
+    assert data["ID"] == author.pk
+    assert data["First name"] == author.first_name
+    assert data["Last name"] == author.last_name
+    assert len(data["Books"]) == 0
 
 
 def test_export_view_xls_empty(api_client):
@@ -113,9 +113,9 @@ def test_export_view_foreignkey_json(api_client, book):
     assert response.status_code == 200
     assert len(response.json()) == 1
     data = response.json()[0]
-    assert data["id"] == book.pk
-    assert data["name"] == book.name
-    assert data["author"] == book.author.pk
+    assert data["ID"] == book.pk
+    assert data["Name"] == book.name
+    assert data["Author"] == book.author.pk
 
 
 def test_export_view_foreignkey_xls(api_client, book):
@@ -148,10 +148,10 @@ def test_export_view_transform_json(api_client, book):
     assert response.status_code == 200
     assert len(response.json()) == 1
     data = response.json()[0]
-    assert data["id"] == book.author.pk
-    assert data["first_name"] == book.author.first_name
-    assert data["last_name"] == book.author.last_name
-    assert data["books"] == [book.name]
+    assert data["ID"] == book.author.pk
+    assert data["First name"] == book.author.first_name
+    assert data["Last name"] == book.author.last_name
+    assert data["Books"] == [book.name]
 
 
 def test_export_view_transform_xls(api_client, book):

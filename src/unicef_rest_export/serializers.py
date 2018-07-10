@@ -6,8 +6,21 @@ class ExportSerializer(serializers.ListSerializer):
     """Transforms data into a dataset"""
     read_only = True
 
+    def get_header_label(self, field):
+        try:
+            label = self.child.fields[field].label
+        except KeyError:
+            label = field
+        return label
+
+    def get_headers(self, data):
+        headers = []
+        for field in data[0].keys():
+            headers.append(self.get_header_label(field))
+        return headers
+
     def get_dataset(self, data):
-        headers = list(data[0].keys())
+        headers = self.get_headers(data)
         data_list = []
         for d in data:
             data_list.append([v for _, v in d.items()])
