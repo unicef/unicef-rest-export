@@ -9,7 +9,7 @@ class ExportSerializer(serializers.ListSerializer):
     def get_header_label(self, field):
         try:
             label = self.child.fields[field].label
-        except:
+        except KeyError:
             label = field
         return label
 
