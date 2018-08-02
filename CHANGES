@@ -1,0 +1,43 @@
+Release 0.4
+----------------
+* added FriendlyRenderer
+*
+
+Release 0.3.4
+----------------
+* tweaked PDFExport
+
+
+Release 0.3.3
+----------------
+* tweaked PDFExport
+
+
+Release 0.3.2
+----------------
+* freeze requirements
+
+
+Release 0.3.1
+----------------
+* fixed setup requirements
+
+
+Release 0.3
+----------------
+* added PDFExport
+
+
+Release 0.2.1
+----------------
+* updated requirements
+
+
+Release 0.2
+----------------
+* added OpenXMLRenderer
+
+
+Release 0.1
+----------------
+* Initial release
