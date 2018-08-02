@@ -10,6 +10,7 @@ django = "*"
 "psycopg2-binary" = "*"
 openpyxl = "<2.5"  # https://github.com/kennethreitz/tablib/issues/331
 reportlab = "*"
+djangorestframework-csv = "*"
 
 [dev-packages]
 "flake8" = "*"

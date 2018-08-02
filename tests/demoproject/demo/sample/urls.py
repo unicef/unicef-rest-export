@@ -30,6 +30,7 @@ urlpatterns = [
         name='author-template'
     ),
     url(r'^book/$', views.BookView.as_view(), name='book-view'),
+    url(r'^book/csv/$', views.BookCSVView.as_view(), name='book-csv-view'),
 ]
 
 urlpatterns += router.urls
