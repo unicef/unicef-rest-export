@@ -8,6 +8,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Table, TableStyle
 from rest_framework import status
 from rest_framework.renderers import BaseRenderer, TemplateHTMLRenderer
+from rest_framework_csv.renderers import CSVRenderer
 from tablib import Dataset
 
 RESPONSE_ERROR = (
@@ -212,3 +213,11 @@ class ExportPDFRenderer(ExportFileRenderer):
     def render_dataset(self, data, *args, **kwargs):
         with open(self.filename, "wb") as fp:
             fp.write(self.export_set(data))
+
+
+class FriendlyCSVRenderer(CSVRenderer):
+
+    def flatten_item(self, item):
+        if isinstance(item, bool):
+            return {'': {True: 'Yes', False: ''}[item]}
+        return super().flatten_item(item)

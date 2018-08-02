@@ -1,5 +1,8 @@
 import pytest
 from django.urls import reverse
+from rest_framework.test import APIClient
+from tablib import Dataset
+from tests.factories import BookFactory, UserFactory
 
 pytestmark = pytest.mark.django_db
 
@@ -190,3 +193,20 @@ def test_export_view_get_template_context(api_client, author):
     assert response.status_code == 200
     assert str.encode(author.first_name) in response.content
     assert b"Sample Home" in response.content
+
+
+@pytest.mark.django_db
+def test_export_model_view():
+    user = UserFactory(is_superuser=True)
+    BookFactory(name='demo')
+    BookFactory(name='test')
+
+    client = APIClient()
+    client.force_authenticate(user=user)
+
+    url = reverse('sample:author-list') + '?format=csv'
+    response = client.get(url, format='json')
+
+    dataset = Dataset().load(response.content.decode('utf-8'), 'csv')
+    assert len(dataset._get_headers()) == 4
+    assert dataset.headers == ['ID', 'Books', 'First name', 'Last name']
