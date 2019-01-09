@@ -1,3 +1,7 @@
+Release 0.4.3
+-------------
+* Format dataset to be rendered once
+
 Release 0.4.2
 -------------
 * PDF renderer gracefully handles large blobs of text
