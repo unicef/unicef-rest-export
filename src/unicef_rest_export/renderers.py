@@ -6,6 +6,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import landscape, letter
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import PageBreak, Paragraph, SimpleDocTemplate, Table, TableStyle
+from reportlab.platypus.doctemplate import LayoutError
 from rest_framework import status
 from rest_framework.renderers import BaseRenderer, TemplateHTMLRenderer
 from rest_framework_csv.renderers import CSVRenderer
@@ -15,6 +16,7 @@ RESPONSE_ERROR = (
     "Response data is a %s, not a Dataset! "
     "Did you extend ExportMixin?"
 )
+PDF_COLUMNS_PER_PAGE = 9
 
 
 class ExportBaseRenderer(BaseRenderer):
@@ -167,15 +169,13 @@ class ExportPDFRenderer(ExportFileRenderer):
     media_type = "application/pdf"
     format = "pdf"
 
-    def export_set(self, dataset):
+    def export_set(self, dataset, columns_per_page):
         stream = BytesIO()
         doc = SimpleDocTemplate(stream, pagesize=landscape(letter))
         styles = getSampleStyleSheet()
         styleCell = styles["Normal"]
         styleCell.fontSize = 7
         elements = []
-
-        columns_per_page = 9
 
         if dataset.headers:
             # slice the data into a set number of columns
@@ -210,13 +210,41 @@ class ExportPDFRenderer(ExportFileRenderer):
         doc.build(elements)
         return stream.getvalue()
 
+    def export_failure(self):
+        stream = BytesIO()
+        doc = SimpleDocTemplate(stream, pagesize=landscape(letter))
+        styles = getSampleStyleSheet()
+        styleCell = styles["Normal"]
+        styleCell.fontSize = 7
+        elements = [
+            Paragraph(
+                (
+                    "Data not able to be formatted for PDF, "
+                    "please try another format."
+                ),
+                styleCell
+            )
+        ]
+        doc.build(elements)
+        return stream.getvalue()
+
     def render_dataset(self, data, *args, **kwargs):
         with open(self.filename, "wb") as fp:
-            fp.write(self.export_set(data))
+            columns_per_page = PDF_COLUMNS_PER_PAGE
+            success = False
+            while columns_per_page > 1:
+                try:
+                    fp.write(self.export_set(data, columns_per_page))
+                except LayoutError:
+                    columns_per_page -= 1
+                else:
+                    success = True
+                    break
+            if not success:
+                fp.write(self.export_failure())
 
 
 class FriendlyCSVRenderer(CSVRenderer):
-
     def flatten_item(self, item):
         if isinstance(item, bool):
             return {'': {True: 'Yes', False: ''}[item]}
