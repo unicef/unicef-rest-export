@@ -4,7 +4,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.renderers import JSONRenderer
 
 from unicef_rest_export.renderers import FriendlyCSVRenderer
-from unicef_rest_export.views import ExportMixin, ExportView, ExportViewSet, ExportModelView
+from unicef_rest_export.views import ExportMixin, ExportModelView, ExportView, ExportViewSet
 
 
 class AuthorNormalView(ExportMixin, ListAPIView):

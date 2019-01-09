@@ -149,7 +149,7 @@ def test_export_view_foreignkey_pdf(api_client, book):
 
 
 def test_export_view_foreignkey_pdf_invalid(api_client):
-    book = BookFactory(description = factory.Faker("sentence", nb_words=800))
+    BookFactory(description=factory.Faker("sentence", nb_words=800))
     url = "{}?format=pdf".format(reverse("sample:book-view"))
     response = api_client.get(url)
     assert response.status_code == 200
