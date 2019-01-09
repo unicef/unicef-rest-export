@@ -30,3 +30,11 @@ def author():
 @pytest.fixture
 def book():
     return factories.BookFactory()
+
+
+@pytest.fixture
+def books():
+    class BookFactory:
+        def get(self):
+            return factories.BookFactory()
+    return BookFactory()

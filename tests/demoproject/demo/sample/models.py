@@ -16,6 +16,7 @@ class Book(models.Model):
         on_delete=models.CASCADE,
     )
     name = models.CharField(max_length=150)
+    description = models.TextField()
     best_seller = models.BooleanField(default=False)
 
     def __str__(self):

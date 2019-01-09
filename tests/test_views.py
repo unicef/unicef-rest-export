@@ -1,3 +1,4 @@
+import factory
 import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
@@ -140,6 +141,15 @@ def test_export_view_foreignkey_csv(api_client, book):
 
 
 def test_export_view_foreignkey_pdf(api_client, book):
+    url = "{}?format=pdf".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    with open("/tmp/file.pdf", "wb") as fp:
+        fp.write(response.content)
+    assert response.status_code == 200
+
+
+def test_export_view_foreignkey_pdf_invalid(api_client):
+    BookFactory(description=factory.Faker("sentence", nb_words=800))
     url = "{}?format=pdf".format(reverse("sample:book-view"))
     response = api_client.get(url)
     assert response.status_code == 200
