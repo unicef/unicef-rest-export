@@ -169,7 +169,7 @@ class ExportPDFRenderer(ExportFileRenderer):
     media_type = "application/pdf"
     format = "pdf"
 
-    def export_set(self, dataset, columns_per_page):
+    def export_set(self, formatted, headers, columns_per_page):
         stream = BytesIO()
         doc = SimpleDocTemplate(stream, pagesize=landscape(letter))
         styles = getSampleStyleSheet()
@@ -177,15 +177,14 @@ class ExportPDFRenderer(ExportFileRenderer):
         styleCell.fontSize = 7
         elements = []
 
-        if dataset.headers:
+        if headers:
             # slice the data into a set number of columns
             # in order to fit on the page
-            formatted = dataset._package()
-            for start in range(0, len(dataset.headers), columns_per_page):
+            for start in range(0, len(headers), columns_per_page):
                 end = start + columns_per_page
                 data = [['Row'] + [
                     item if item is not None else ''
-                    for item in dataset.headers[start:end]
+                    for item in headers[start:end]
                 ]]
 
                 row_num = 1
@@ -229,12 +228,16 @@ class ExportPDFRenderer(ExportFileRenderer):
         return stream.getvalue()
 
     def render_dataset(self, data, *args, **kwargs):
+        formatted = data._package()
+        headers = data.headers
         with open(self.filename, "wb") as fp:
             columns_per_page = PDF_COLUMNS_PER_PAGE
             success = False
             while columns_per_page > 1:
                 try:
-                    fp.write(self.export_set(data, columns_per_page))
+                    fp.write(
+                        self.export_set(formatted, headers, columns_per_page)
+                    )
                 except LayoutError:
                     columns_per_page -= 1
                 else:
