@@ -155,6 +155,13 @@ def test_export_view_foreignkey_pdf_invalid(api_client):
     assert response.status_code == 200
 
 
+def test_export_view_foreignkey_pdf_table_invalid(api_client):
+    BookFactory(description=factory.Faker("sentence", nb_words=800))
+    url = "{}?format=pdf_table".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
 def test_export_view_transform_json(api_client, book):
     url = "{}?format=json".format(reverse("sample:author-transform"))
     response = api_client.get(url)
@@ -187,6 +194,12 @@ def test_export_view_transform_csv(api_client, book):
 
 def test_export_view_transform_pdf(api_client, book):
     url = "{}?format=pdf".format(reverse("sample:author-transform"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_transform_pdf_table(api_client, book):
+    url = "{}?format=pdf_table".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
 
