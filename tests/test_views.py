@@ -175,7 +175,7 @@ def test_export_view_foreignkey_pdf(api_client, book):
 def test_export_view_foreignkey_pdf_table(api_client, book):
     url = "{}?format=pdf_table".format(reverse("sample:book-view"))
     response = api_client.get(url)
-    with open("/tmp/file.pdf", "wb") as fp:
+    with open("/tmp/file_table.pdf", "wb") as fp:
         fp.write(response.content)
     assert response.status_code == 200
 
