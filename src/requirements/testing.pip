@@ -3,16 +3,15 @@ attrs
 coverage
 factory-boy
 faker
+filelock
 flake8
 isort
 mccabe
 more-itertools
-packaging
 pluggy
 py
 pycodestyle
 pyflakes
-pyparsing
 pytest-cov
 pytest-django
 pytest-echo
@@ -21,5 +20,6 @@ pytest
 python-dateutil
 six
 text-unidecode
+toml
 tox
 virtualenv

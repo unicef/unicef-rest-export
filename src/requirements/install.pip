@@ -1,12 +1,15 @@
+defusedxml
 django
 djangorestframework-csv
 djangorestframework
 et-xmlfile
 jdcal
+lxml
 odfpy
 openpyxl
 pillow
 psycopg2-binary
+python-docx
 pytz
 pyyaml
 reportlab

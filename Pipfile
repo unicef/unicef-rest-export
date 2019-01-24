@@ -11,6 +11,7 @@ django = "*"
 openpyxl = "<2.5"  # https://github.com/kennethreitz/tablib/issues/331
 reportlab = "*"
 djangorestframework-csv = "*"
+python-docx = "*"
 
 [dev-packages]
 "flake8" = "*"
