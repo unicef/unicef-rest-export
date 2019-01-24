@@ -257,14 +257,14 @@ class ExportPDFRenderer(ExportFileRenderer):
         stream = BytesIO()
         doc = SimpleDocTemplate(stream)
         styles = getSampleStyleSheet()
-        styleCell = styles["Normal"]
-        styleCell.fontSize = 7
+        styleParagraph = styles["Normal"]
+        styleParagraph.fontSize = 7
         elements = []
 
         for row in formatted:
             if row:
                 for k, val in row.items():
-                    p = Paragraph(f"{k}: {val}", styleCell)
+                    p = Paragraph(f"<b>{k}:</b> {val}", styleParagraph)
                     elements.append(p)
                 elements.append(PageBreak())
 
@@ -289,7 +289,9 @@ class ExportDocxRenderer(ExportFileRenderer):
         for row in formatted:
             if row:
                 for k, val in row.items():
-                    doc.add_paragraph(f"{k}: {val}")
+                    p = doc.add_paragraph()
+                    p.add_run(f"{k}:").bold = True
+                    p.add_run(f"{val}")
                 doc.add_page_break()
 
         doc.save(stream)
