@@ -1,3 +1,8 @@
+Release 0.5.0
+-------------
+* Add docx rendering option
+* Add pdf non table rendering option
+
 Release 0.4.3
 -------------
 * Format dataset to be rendered once
