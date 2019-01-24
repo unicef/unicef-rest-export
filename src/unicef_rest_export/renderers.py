@@ -2,6 +2,7 @@ import os
 from io import BytesIO, StringIO
 from tempfile import mkstemp
 
+from docx import Document
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import landscape, letter
 from reportlab.lib.styles import getSampleStyleSheet
@@ -268,6 +269,30 @@ class ExportPDFRenderer(ExportFileRenderer):
                 elements.append(PageBreak())
 
         doc.build(elements)
+        return stream.getvalue()
+
+    def render_dataset(self, data, *args, **kwargs):
+        formatted = data._package()
+        with open(self.filename, "wb") as fp:
+            fp.write(self.export_set(formatted))
+
+
+class ExportDocxRenderer(ExportFileRenderer):
+    """Renders dataset as Doc (.docx)"""
+    media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    format = "docx"
+
+    def export_set(self, formatted):
+        stream = BytesIO()
+        doc = Document()
+
+        for row in formatted:
+            if row:
+                for k, val in row.items():
+                    doc.add_paragraph(f"{k}: {val}")
+                doc.add_page_break()
+
+        doc.save(stream)
         return stream.getvalue()
 
     def render_dataset(self, data, *args, **kwargs):
