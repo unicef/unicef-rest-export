@@ -2,9 +2,10 @@ from demo.sample import serializers
 from demo.sample.models import Author, Book
 from rest_framework.generics import ListAPIView
 from rest_framework.renderers import JSONRenderer
+from rest_framework.viewsets import ModelViewSet
 
 from unicef_rest_export.renderers import FriendlyCSVRenderer
-from unicef_rest_export.views import ExportMixin, ExportModelView, ExportView, ExportViewSet
+from unicef_rest_export.views import ExportMixin, ExportModelView, ExportView, ExportViewBase, ExportViewSet
 
 
 class AuthorNormalView(ExportMixin, ListAPIView):
@@ -47,6 +48,11 @@ class AuthorTemplateView(ExportView):
 class AuthorViewSet(ExportViewSet):
     queryset = Author.objects.all()
     serializer_class = serializers.AuthorSerializer
+
+
+class BookViewSet(ExportViewBase, ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = serializers.BookSerializer
 
 
 class BookView(ExportView):

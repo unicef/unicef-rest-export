@@ -1,3 +1,7 @@
+Release 0.5.1
+-------------
+* Update retrieve method to handle export rendering
+
 Release 0.5.0
 -------------
 * Add docx rendering option

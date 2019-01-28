@@ -1,8 +1,10 @@
 from django.conf import settings
 from rest_framework.generics import ListAPIView
 from rest_framework.mixins import ListModelMixin
+from rest_framework.response import Response
 from rest_framework.settings import perform_import
 from rest_framework.viewsets import GenericViewSet
+from tablib import Dataset
 
 from unicef_rest_export.renderers import ExportBaseRenderer
 from unicef_rest_export.serializers import ExportSerializer
@@ -56,6 +58,28 @@ class ExportMixin(object):
             return self.with_list_serializer(self.serializer_class)
         else:
             return self.serializer_class
+
+    def get_data(self, serializer):
+        data = serializer.data
+        if isinstance(self.request.accepted_renderer, ExportBaseRenderer):
+            headers = []
+            for field in data.keys():
+                try:
+                    label = serializer.fields[field].label
+                except KeyError:
+                    label = field
+                headers.append(label)
+            dataset = Dataset(*[[v for _, v in data.items()]], headers=headers)
+            if hasattr(self, "transform_dataset"):
+                data = self.transform_dataset(dataset)
+            else:
+                data = dataset
+        return data
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(self.get_data(serializer))
 
 
 class ExportViewBase(ExportMixin):
