@@ -277,9 +277,12 @@ class ExportPDFRenderer(ExportFileRenderer):
             fp.write(self.export_set(formatted))
 
 
-class ExportDocxRenderer(ExportFileRenderer):
-    """Renders dataset as Doc (.docx)"""
+class ExportDocxBaseRenderer(ExportFileRenderer):
     media_type = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+
+class ExportDocxRenderer(ExportDocxBaseRenderer):
+    """Renders dataset as Doc (.docx)"""
     format = "docx"
 
     def export_set(self, formatted):
@@ -301,6 +304,40 @@ class ExportDocxRenderer(ExportFileRenderer):
         formatted = data._package()
         with open(self.filename, "wb") as fp:
             fp.write(self.export_set(formatted))
+
+
+class ExportDocxTableRenderer(ExportDocxBaseRenderer):
+    """Renders dataset as Doc (.docx) in table format"""
+    format = "docx_table"
+
+    def export_set(self, formatted, headers):
+        stream = BytesIO()
+        doc = Document()
+
+        if not headers:
+            doc.add_paragraph("No data provided.")
+        else:
+            table = doc.add_table(rows=1, cols=len(headers))
+
+            # set heading text
+            header_cells = table.rows[0].cells
+            for i, heading in enumerate(headers):
+                header_cells[i].text = heading
+
+            # set data
+            for record in formatted:
+                row = table.add_row().cells
+                for i, data in enumerate(record):
+                    row[i].text = str(data)
+
+        doc.save(stream)
+        return stream.getvalue()
+
+    def render_dataset(self, data, *args, **kwargs):
+        formatted = data._package()
+        headers = data.headers
+        with open(self.filename, "wb") as fp:
+            fp.write(self.export_set(formatted, headers))
 
 
 class FriendlyCSVRenderer(CSVRenderer):
