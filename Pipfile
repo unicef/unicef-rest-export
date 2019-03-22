@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 tablib = "*"
 djangorestframework = "*"
-django = "*"
+django = ">=2.1.6"
 "psycopg2-binary" = "*"
 openpyxl = "<2.5"  # https://github.com/kennethreitz/tablib/issues/331
 reportlab = "*"
