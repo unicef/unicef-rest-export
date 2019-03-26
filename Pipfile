@@ -4,11 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tablib = "*"
+tablib = ">=0.13"
 djangorestframework = "*"
 django = ">=2.1.6"
 "psycopg2-binary" = "*"
-openpyxl = "<2.5"  # https://github.com/kennethreitz/tablib/issues/331
+openpyxl = "*"
 reportlab = "*"
 djangorestframework-csv = "*"
 python-docx = "*"
