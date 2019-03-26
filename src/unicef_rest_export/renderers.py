@@ -327,8 +327,8 @@ class ExportDocxTableRenderer(ExportDocxBaseRenderer):
             # set data
             for record in formatted:
                 row = table.add_row().cells
-                for i, data in enumerate(record):
-                    row[i].text = str(data)
+                for i, key in enumerate(record):
+                    row[i].text = str(record[key])
 
         doc.save(stream)
         return stream.getvalue()
