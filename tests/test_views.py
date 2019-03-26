@@ -3,6 +3,7 @@ import pytest
 from django.urls import reverse
 from rest_framework.test import APIClient
 from tablib import Dataset
+
 from tests.factories import BookFactory, UserFactory
 
 pytestmark = pytest.mark.django_db
@@ -134,6 +135,12 @@ def test_export_view_list_docx_empty(api_client):
     assert response.status_code == 200
 
 
+def test_export_view_list_docx_table_empty(api_client):
+    url = "{}?format=docx_table".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
 def test_export_view_list_pdf(api_client, author):
     url = "{}?format=pdf".format(reverse("sample:author-view"))
     response = api_client.get(url)
@@ -168,8 +175,22 @@ def test_export_view_list_docx(api_client, author):
     assert response.status_code == 200
 
 
+def test_export_view_list_docx_table(api_client, author):
+    url = "{}?format=docx_table".format(reverse("sample:author-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
 def test_export_view_retrieve_docx(api_client, book):
     url = "{}?format=docx".format(
+        reverse("sample:book-detail", args=[book.pk])
+    )
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_retrieve_docx_table(api_client, book):
+    url = "{}?format=docx_table".format(
         reverse("sample:book-detail", args=[book.pk])
     )
     response = api_client.get(url)
@@ -241,6 +262,14 @@ def test_export_view_foreignkey_list_docx(api_client, book):
     assert response.status_code == 200
 
 
+def test_export_view_foreignkey_list_docx_table(api_client, book):
+    url = "{}?format=docx_table".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    with open("/tmp/file.docx", "wb") as fp:
+        fp.write(response.content)
+    assert response.status_code == 200
+
+
 def test_export_view_list_pdf_text_blob(api_client):
     BookFactory(description=factory.Faker("sentence", nb_words=800))
     url = "{}?format=pdf".format(reverse("sample:book-view"))
@@ -258,6 +287,13 @@ def test_export_view_list_pdf_table_text_blob(api_client):
 def test_export_view_list_docx_text_blob(api_client):
     BookFactory(description=factory.Faker("sentence", nb_words=800))
     url = "{}?format=docx".format(reverse("sample:book-view"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_list_docx_table_text_blob(api_client):
+    BookFactory(description=factory.Faker("sentence", nb_words=800))
+    url = "{}?format=docx_table".format(reverse("sample:book-view"))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -306,6 +342,12 @@ def test_export_view_list_transform_pdf_table(api_client, book):
 
 def test_export_view_list_transform_docx(api_client, book):
     url = "{}?format=docx".format(reverse("sample:author-transform"))
+    response = api_client.get(url)
+    assert response.status_code == 200
+
+
+def test_export_view_list_transform_docx_table(api_client, book):
+    url = "{}?format=docx_table".format(reverse("sample:author-transform"))
     response = api_client.get(url)
     assert response.status_code == 200
 

@@ -1,3 +1,8 @@
+Release 0.5.2
+-------------
+* Add docx table renderer option
+* Update django and pyyaml requirements for security patches
+
 Release 0.5.1
 -------------
 * Update retrieve method to handle export rendering
