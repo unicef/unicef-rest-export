@@ -15,6 +15,7 @@ pytz
 pyyaml
 reportlab
 six
+sqlparse
 tablib
 unicodecsv
 xlrd
