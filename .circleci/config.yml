@@ -17,19 +17,6 @@ py36: &py36
     - image: circleci/postgres:9.5-alpine
       <<: *db-env
 
-cmd-test: &cmd-test
-  pytest tests \
-    -q \
-    --create-db \
-    --cov-report=html \
-    --cov-report=term \
-    --cov-config=tests/.coveragerc \
-    --cov=unicef_rest_export
-
-cmd-install: &cmd-install
-  pip install -rq src/requirements/install.pip
-  pip install -rq src/requirements/testing.pip
-
 py37: &py37
   working_directory: ~/code
   docker:
@@ -49,7 +36,8 @@ jobs:
       - run:
           name: lint checks
           command: |
-            <<: *cmd-install
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
             flake8 src/
             isort -rc src/ --check-only
 
@@ -61,8 +49,15 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.0,<2.1
-            <<: *cmd-install
-            <<: *cmd-test
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
+            pytest tests \
+              -q \
+              --create-db \
+              --cov-report=html \
+              --cov-report=term \
+              --cov-config=tests/.coveragerc \
+              --cov=unicef_rest_export
 
   test-py36-d21:
     <<: *py36
@@ -72,8 +67,15 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.1,<2.2
-            <<: *cmd-install
-            <<: *cmd-test
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
+            pytest tests \
+              -q \
+              --create-db \
+              --cov-report=html \
+              --cov-report=term \
+              --cov-config=tests/.coveragerc \
+              --cov=unicef_rest_export
 
   test-py36-d22:
     <<: *py36
@@ -83,8 +85,15 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.2,<2.3
-            <<: *cmd-install
-            <<: *cmd-test
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
+            pytest tests \
+              -q \
+              --create-db \
+              --cov-report=html \
+              --cov-report=term \
+              --cov-config=tests/.coveragerc \
+              --cov=unicef_rest_export
 
   test-py37-d20:
     <<: *py37
@@ -94,8 +103,15 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.0,<2.1
-            <<: *cmd-install
-            <<: *cmd-test
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
+            pytest tests \
+              -q \
+              --create-db \
+              --cov-report=html \
+              --cov-report=term \
+              --cov-config=tests/.coveragerc \
+              --cov=unicef_rest_export
 
   test-py37-d21:
     <<: *py37
@@ -105,8 +121,15 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.1,<2.2
-            <<: *cmd-install
-            <<: *cmd-test
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
+            pytest tests \
+              -q \
+              --create-db \
+              --cov-report=html \
+              --cov-report=term \
+              --cov-config=tests/.coveragerc \
+              --cov=unicef_rest_export
 
   test-py37-d22:
     <<: *py37
@@ -116,8 +139,15 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.2,<2.3
-            <<: *cmd-install
-            <<: *cmd-test
+            pip install -rq src/requirements/install.pip
+            pip install -rq src/requirements/testing.pip
+            pytest tests \
+              -q \
+              --create-db \
+              --cov-report=html \
+              --cov-report=term \
+              --cov-config=tests/.coveragerc \
+              --cov=unicef_rest_export
 
   deploy:
     <<: *py36
