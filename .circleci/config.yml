@@ -168,26 +168,6 @@ jobs:
           fingerprints:
             - "16:e1:12:cd:51:9f:11:92:ed:7a:2b:d8:70:ae:4c:28"
       - run:
-          name: package and release
-          command: |
-            export PATH=/home/circleci/.local/bin:$PATH
-            export TAG=${TAG:=${CIRCLE_BRANCH#*/}}
-            if [[ $CIRCLE_BRANCH == $RELEASE_MATCH ]]; then
-              git reset --hard
-
-              git config user.email "ci@unicef.org"
-              git config user.name "CI"
-
-              git checkout master
-              git merge --no-ff release/$TAG -m "merge release/$TAG"
-              git tag -a -m "v$TAG" $TAG
-              git checkout develop
-              git merge --no-ff release/$TAG -m "merge release/$TAG"
-              git push origin --verbose --all
-              git push origin --verbose --tags
-              git push origin --verbose --delete release/$TAG
-            fi
-      - run:
           name: release
           command: |
             export TAG=${TAG:=${CIRCLE_BRANCH#*/}}
@@ -260,3 +240,6 @@ workflows:
             - test-py37-d20
             - test-py37-d21
             - test-py37-d22
+          fitlers:
+            tags:
+              only: /.*/
