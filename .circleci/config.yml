@@ -50,7 +50,7 @@ jobs:
           name: run tests
           command: |
             pip install "django>=2.0,<2.1" --user
-            test.sh
+            ./test.sh
 
   test-py36-d21:
     <<: *py36
@@ -60,7 +60,7 @@ jobs:
           name: run tests
           command: |
             pip install "django>=2.1,<2.2" --user
-            test.sh
+            ./test.sh
 
   test-py36-d22:
     <<: *py36
@@ -70,7 +70,7 @@ jobs:
           name: run tests
           command: |
             pip install "django>=2.2,<2.3" --user
-            test.sh
+            ./test.sh
 
   test-py37-d20:
     <<: *py37
@@ -80,7 +80,7 @@ jobs:
           name: run tests
           command: |
             pip install "django>=2.0,<2.1" --user
-            test.sh
+            ./test.sh
 
   test-py37-d21:
     <<: *py37
@@ -90,7 +90,7 @@ jobs:
           name: run tests
           command: |
             pip install "django>=2.1,<2.2" --user
-            test.sh
+            ./test.sh
 
   test-py37-d22:
     <<: *py37
@@ -100,7 +100,7 @@ jobs:
           name: run tests
           command: |
             pip install "django>=2.2,<2.3" --user
-            test.sh
+            ./test.sh
 
   tag:
     working_directory: ~/code
