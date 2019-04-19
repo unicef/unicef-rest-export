@@ -36,8 +36,9 @@ jobs:
       - run:
           name: lint checks
           command: |
-            pip install -r src/requirements/install.pip
-            pip install -r src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             flake8 src/
             isort -rc src/ --check-only
 
@@ -48,9 +49,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install django>=2.0,<2.1
-            pip install -r src/requirements/install.pip
-            pip install -r src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install "django>=2.0,<2.1" --user
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
@@ -66,9 +68,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install django>=2.1,<2.2
-            pip install -r src/requirements/install.pip
-            pip install -r src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install "django>=2.1,<2.2" --user
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
@@ -84,9 +87,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install django>=2.2,<2.3
-            pip install -r src/requirements/install.pip
-            pip install -r src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install "django>=2.2,<2.3" --user
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
@@ -102,9 +106,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install django>=2.0,<2.1
-            pip install -r src/requirements/install.pip
-            pip install -r src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install "django>=2.0,<2.1" --user
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
@@ -120,9 +125,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install django>=2.1,<2.2
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install "django>=2.1,<2.2" --user
+            pip install -rq src/requirements/install.pip --user
+            pip install -rq src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
@@ -138,9 +144,10 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install django>=2.2,<2.3
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            export PATH=$PATH:/home/circleci/.local/bin
+            pip install "django>=2.2,<2.3" --user
+            pip install -rq src/requirements/install.pip --user
+            pip install -rq src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
