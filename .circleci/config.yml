@@ -156,23 +156,6 @@ jobs:
               --cov-config=tests/.coveragerc \
               --cov=unicef_rest_export
 
-  deploy:
-    <<: *py36
-    steps:
-      - checkout
-      - run:
-          name: tag and release if release candidate
-          command: |
-            if [[ $CIRCLE_BRANCH == $RELEASE_MATCH ]]; then
-              curl --user ${CIRCLE_TOKEN}: \
-                --fail \
-                --data build_parameters[CIRCLE_JOB]=tag \
-                --data revision=$CIRCLE_SHA1 \
-                https://circleci.com/api/v1.1/project/github/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/tree/$CIRCLE_BRANCH
-            else
-              echo "Skipped as '$CIRCLE_BRANCH' does not match '$RELEASE_MATCH' branch"
-            fi
-
   tag:
     working_directory: ~/code
     docker:
@@ -189,9 +172,7 @@ jobs:
           command: |
             export PATH=/home/circleci/.local/bin:$PATH
             export TAG=${TAG:=${CIRCLE_BRANCH#*/}}
-            git status
-            git show-branch release/$TAG
-            if [ $? -eq 0 ];then
+            if [[ $CIRCLE_BRANCH == $RELEASE_MATCH ]]; then
               git reset --hard
 
               git config user.email "ci@unicef.org"
@@ -271,14 +252,6 @@ workflows:
       - test-py37-d22:
           requires:
             - lint
-      - deploy:
-          requires:
-            - test-py36-d20
-            - test-py36-d21
-            - test-py36-d22
-            - test-py37-d20
-            - test-py37-d21
-            - test-py37-d22
       - tag:
           requires:
             - test-py36-d20
