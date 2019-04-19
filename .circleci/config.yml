@@ -127,8 +127,8 @@ jobs:
           command: |
             export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.1,<2.2" --user
-            pip install -rq src/requirements/install.pip --user
-            pip install -rq src/requirements/testing.pip --user
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
@@ -146,8 +146,8 @@ jobs:
           command: |
             export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.2,<2.3" --user
-            pip install -rq src/requirements/install.pip --user
-            pip install -rq src/requirements/testing.pip --user
+            pip install -r src/requirements/install.pip --user
+            pip install -r src/requirements/testing.pip --user
             pytest tests \
               -q \
               --create-db \
