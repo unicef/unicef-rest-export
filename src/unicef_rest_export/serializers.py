@@ -16,7 +16,7 @@ class ExportSerializer(serializers.ListSerializer):
     def get_headers(self, data):
         headers = []
         for field in data[0].keys():
-            headers.append(self.get_header_label(field))
+            headers.append(str(self.get_header_label(field)))
         return headers
 
     def get_dataset(self, data):
