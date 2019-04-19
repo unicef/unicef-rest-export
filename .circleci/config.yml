@@ -240,6 +240,6 @@ workflows:
             - test-py37-d20
             - test-py37-d21
             - test-py37-d22
-          fitlers:
+          filters:
             tags:
               only: /.*/
