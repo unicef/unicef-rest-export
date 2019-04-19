@@ -49,17 +49,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.0,<2.1" --user
-            pip install -r src/requirements/install.pip --user
-            pip install -r src/requirements/testing.pip --user
-            pytest tests \
-              -q \
-              --create-db \
-              --cov-report=html \
-              --cov-report=term \
-              --cov-config=tests/.coveragerc \
-              --cov=unicef_rest_export
+            test.sh
 
   test-py36-d21:
     <<: *py36
@@ -68,17 +59,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.1,<2.2" --user
-            pip install -r src/requirements/install.pip --user
-            pip install -r src/requirements/testing.pip --user
-            pytest tests \
-              -q \
-              --create-db \
-              --cov-report=html \
-              --cov-report=term \
-              --cov-config=tests/.coveragerc \
-              --cov=unicef_rest_export
+            test.sh
 
   test-py36-d22:
     <<: *py36
@@ -87,17 +69,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.2,<2.3" --user
-            pip install -r src/requirements/install.pip --user
-            pip install -r src/requirements/testing.pip --user
-            pytest tests \
-              -q \
-              --create-db \
-              --cov-report=html \
-              --cov-report=term \
-              --cov-config=tests/.coveragerc \
-              --cov=unicef_rest_export
+            test.sh
 
   test-py37-d20:
     <<: *py37
@@ -106,17 +79,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.0,<2.1" --user
-            pip install -r src/requirements/install.pip --user
-            pip install -r src/requirements/testing.pip --user
-            pytest tests \
-              -q \
-              --create-db \
-              --cov-report=html \
-              --cov-report=term \
-              --cov-config=tests/.coveragerc \
-              --cov=unicef_rest_export
+            test.sh
 
   test-py37-d21:
     <<: *py37
@@ -125,17 +89,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.1,<2.2" --user
-            pip install -r src/requirements/install.pip --user
-            pip install -r src/requirements/testing.pip --user
-            pytest tests \
-              -q \
-              --create-db \
-              --cov-report=html \
-              --cov-report=term \
-              --cov-config=tests/.coveragerc \
-              --cov=unicef_rest_export
+            test.sh
 
   test-py37-d22:
     <<: *py37
@@ -144,17 +99,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            export PATH=$PATH:/home/circleci/.local/bin
             pip install "django>=2.2,<2.3" --user
-            pip install -r src/requirements/install.pip --user
-            pip install -r src/requirements/testing.pip --user
-            pytest tests \
-              -q \
-              --create-db \
-              --cov-report=html \
-              --cov-report=term \
-              --cov-config=tests/.coveragerc \
-              --cov=unicef_rest_export
+            test.sh
 
   tag:
     working_directory: ~/code
