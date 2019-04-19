@@ -36,8 +36,8 @@ jobs:
       - run:
           name: lint checks
           command: |
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            pip install -r src/requirements/install.pip
+            pip install -r src/requirements/testing.pip
             flake8 src/
             isort -rc src/ --check-only
 
@@ -49,8 +49,8 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.0,<2.1
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            pip install -r src/requirements/install.pip
+            pip install -r src/requirements/testing.pip
             pytest tests \
               -q \
               --create-db \
@@ -67,8 +67,8 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.1,<2.2
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            pip install -r src/requirements/install.pip
+            pip install -r src/requirements/testing.pip
             pytest tests \
               -q \
               --create-db \
@@ -85,8 +85,8 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.2,<2.3
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            pip install -r src/requirements/install.pip
+            pip install -r src/requirements/testing.pip
             pytest tests \
               -q \
               --create-db \
@@ -103,8 +103,8 @@ jobs:
           name: run tests
           command: |
             pip install django>=2.0,<2.1
-            pip install -rq src/requirements/install.pip
-            pip install -rq src/requirements/testing.pip
+            pip install -r src/requirements/install.pip
+            pip install -r src/requirements/testing.pip
             pytest tests \
               -q \
               --create-db \
