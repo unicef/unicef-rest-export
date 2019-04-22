@@ -4,7 +4,6 @@ coverage
 entrypoints
 factory-boy
 faker
-filelock
 flake8
 isort
 mccabe
@@ -21,6 +20,3 @@ pytest
 python-dateutil
 six
 text-unidecode
-toml
-tox
-virtualenv
