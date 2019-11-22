@@ -1,7 +1,8 @@
-from demo.sample.models import Author, Book
 from rest_framework import serializers
 
 from unicef_rest_export.serializers import ExportSerializer
+
+from demo.sample.models import Author, Book
 
 
 class BookListSerializer(ExportSerializer):

@@ -1,11 +1,12 @@
-from demo.sample import serializers
-from demo.sample.models import Author, Book
 from rest_framework.generics import ListAPIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.viewsets import ModelViewSet
 
 from unicef_rest_export.renderers import FriendlyCSVRenderer
 from unicef_rest_export.views import ExportMixin, ExportModelView, ExportView, ExportViewBase, ExportViewSet
+
+from demo.sample import serializers
+from demo.sample.models import Author, Book
 
 
 class AuthorNormalView(ExportMixin, ListAPIView):
