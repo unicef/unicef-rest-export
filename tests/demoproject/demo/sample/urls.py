@@ -1,6 +1,7 @@
-from demo.sample import views
 from django.conf.urls import url
 from rest_framework import routers
+
+from demo.sample import views
 
 app_name = 'sample'
 
