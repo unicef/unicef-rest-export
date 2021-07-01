@@ -6,8 +6,8 @@ from rest_framework.settings import perform_import
 from rest_framework.viewsets import GenericViewSet
 from tablib import Dataset
 
-from unicef_rest_export.renderers import ExportBaseRenderer
-from unicef_rest_export.serializers import ExportSerializer
+from unicef_rest_export.renderers import ExportBaseRenderer, ExportOpenXMLRenderer
+from unicef_rest_export.serializers import ExportSerializer, XLSXExportSerializer
 
 DEFAULT_TEMPLATE = False
 EXPORT_RENDERERS = getattr(settings, "EXPORT_RENDERERS", None)
@@ -31,17 +31,17 @@ if EXPORT_RENDERERS is None:
 EXPORT_RENDERERS = perform_import(EXPORT_RENDERERS, "EXPORT_RENDERERS")
 
 
-class ExportMixin(object):
+class ExportMixin:
     export_serializer_class = ExportSerializer
 
-    def with_list_serializer(self, cls):
+    def with_list_serializer(self, cls, export_serializer_class=None):
         meta = getattr(cls, 'Meta', object)
         if getattr(meta, 'list_serializer_class', None):
             return cls
 
         class SerializerWithListSerializer(cls):
             class Meta(meta):
-                list_serializer_class = self.export_serializer_class
+                list_serializer_class = export_serializer_class or self.export_serializer_class
 
         return SerializerWithListSerializer
 
@@ -55,7 +55,9 @@ class ExportMixin(object):
         )
 
         renderer = self.request.accepted_renderer
-        if isinstance(renderer, ExportBaseRenderer):
+        if isinstance(renderer, ExportOpenXMLRenderer):
+            return self.with_list_serializer(self.serializer_class, XLSXExportSerializer)
+        elif isinstance(renderer, ExportBaseRenderer):
             return self.with_list_serializer(self.serializer_class)
         else:
             return self.serializer_class
