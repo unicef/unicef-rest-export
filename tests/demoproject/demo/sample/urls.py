@@ -1,6 +1,7 @@
-from demo.sample import views
-from django.conf.urls import url
+from django.urls import re_path
 from rest_framework import routers
+
+from demo.sample import views
 
 app_name = 'sample'
 
@@ -9,29 +10,29 @@ router.register(r'authors/', views.AuthorViewSet)
 router.register(r'books/', views.BookViewSet)
 
 urlpatterns = [
-    url(
+    re_path(
         r'^author/normal/$',
         views.AuthorNormalView.as_view(),
         name='author-normal'
     ),
-    url(r'^author/$', views.AuthorView.as_view(), name='author-view'),
-    url(
+    re_path(r'^author/$', views.AuthorView.as_view(), name='author-view'),
+    re_path(
         r'^author/transform/$',
         views.AuthorTransformView.as_view(),
         name='author-transform'
     ),
-    url(
+    re_path(
         r'^author/invalid/$',
         views.AuthorInvalidView.as_view(),
         name='author-invalid'
     ),
-    url(
+    re_path(
         r'^author/template/$',
         views.AuthorTemplateView.as_view(),
         name='author-template'
     ),
-    url(r'^book/$', views.BookView.as_view(), name='book-view'),
-    url(r'^book/csv/$', views.BookCSVView.as_view(), name='book-csv-view'),
+    re_path(r'^book/$', views.BookView.as_view(), name='book-view'),
+    re_path(r'^book/csv/$', views.BookCSVView.as_view(), name='book-csv-view'),
 ]
 
 urlpatterns += router.urls

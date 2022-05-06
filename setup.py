@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import ast
 import codecs
 import os.path
@@ -27,74 +26,53 @@ with open(init, 'rb') as f:
     NAME = str(ast.literal_eval(_name_re.search(content).group(1)))
 
 
-def read(*files):
-    content = []
-    for f in files:
-        content.extend(codecs.open(os.path.join(ROOT, 'src', 'requirements', f), 'r').readlines())
-    return "\n".join(filter(lambda l:not l.startswith('-'), content))
-
-
-def check(cmd, filename):
-    out = subprocess.run(cmd, stdout=subprocess.PIPE)
-    f = os.path.join('src', 'requirements', filename)
-    reqs = codecs.open(os.path.join(ROOT, f), 'r').readlines()
-    existing = {re.split("(==|>=|<=>|<|)", name[:-1])[0] for name in reqs}
-    declared = {re.split("(==|>=|<=>|<|)", name)[0] for name in out.stdout.decode('utf8').split("\n") if name and not name.startswith('-')}
-
-    if existing != declared:
-        msg = """Requirements file not updated.
-Run 'make requiremets'
-""".format(' '.join(cmd), f)
-        raise DistutilsError(msg)
-
-class SDistCommand(BaseSDistCommand):
-
-    def run(self):
-        checks = {'install.pip': ['pipenv', 'lock', '--requirements'],
-                  'testing.pip': ['pipenv', 'lock', '-d', '--requirements']}
-
-        for filename, cmd in checks.items():
-            check (cmd, filename)
-        super().run()
-
-
-class VerifyTagVersion(install):
-    """Verify that the git tag matches version"""
-
-    def run(self):
-        tag = os.getenv("CIRCLE_TAG")
-        if tag != VERSION:
-            info = "Git tag: {} does not match the version of this app: {}".format(
-                tag,
-                VERSION
-            )
-            sys.exit(info)
-
-
-setup(name=NAME,
-      version=VERSION,
-      url='https://github.com/unicef/unicef-rest-export',
-      author='UNICEF',
-      author_email='dev@unicef.org',
-      license="Apache 2 License",
-      description='Django package that handles exporting of data',
-      long_description=codecs.open('README.md').read(),
-      package_dir={'': 'src'},
-      packages=find_packages(where='src'),
-      include_package_data=True,
-      install_requires=read('install.pip'),
-      extras_require={
-          'test': read('install.pip', 'testing.pip'),
-      },
-      platforms=['any'],
-      classifiers=[
-          'Environment :: Web Environment',
-          'Programming Language :: Python :: 3.6',
-          'Framework :: Django',
-          'Intended Audience :: Developers'],
-      scripts=[],
-      cmdclass={
-          'sdist': SDistCommand,
-          "verify": VerifyTagVersion,
-      }
+setup(
+    name=NAME,
+    version=VERSION,
+    url='https://github.com/unicef/unicef-rest-export',
+    author='UNICEF',
+    author_email='dev@unicef.org',
+    license="Apache 2 License",
+    description='Django package that handles exporting of data',
+    long_description=codecs.open('README.rst').read(),
+    package_dir={'': 'src'},
+    packages=find_packages(where='src'),
+    include_package_data=True,
+    install_requires=(
+        'django',
+        'djangorestframework-csv',
+        'djangorestframework',
+        'lxml',
+        'python-docx',
+        'pytz',
+        'pyyaml',
+        'reportlab',
+        'tablib[html,xlsx,xls]',
+        'xlrd',
+        'xlwt',
+    ),
+    extras_require={
+        'test': (
+            'coverage',
+            'factory-boy',
+            'faker',
+            'flake8',
+            'isort',
+            'pytest-cov',
+            'pytest-django',
+            'pytest-echo',
+            'pytest-pythonpath',
+            'pytest',
+            'psycopg2',
+        ),
+    },
+    platforms=['any'],
+    classifiers=[
+        'Environment :: Web Environment',
+        'Programming Language :: Python :: 3.9',
+        'Framework :: Django',
+        'Framework :: Django :: 3.2',
+        'Framework :: Django :: 4.0',
+        'Intended Audience :: Developers'],
+    scripts=[],
 )

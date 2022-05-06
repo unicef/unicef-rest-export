@@ -1,16 +1,24 @@
-# UNICEF Rest Export
+UNICEF Rest Export
+==================
 
 Django Rest Framework data export package that handles export/rendering to JSON, CSV, XLS, and HTML
 
 
-## Installation
+Installation
+------------
+
+.. code-block:: bash
 
     pip install unicef-rest-export
 
 
-## Setup
+Setup
+-----
 
 Add ``unicef_rest_export`` to ``INSTALLED_APPS`` in settings
+
+
+.. code-block:: bash
 
     INSTALLED_APPS = [
         ...
@@ -18,9 +26,12 @@ Add ``unicef_rest_export`` to ``INSTALLED_APPS`` in settings
     ]
 
 
-## Usage
+Usage
+-----
 
 A sample model view;
+
+.. code-block:: bash
 
     class AuthorView(ExportView):
         queryset = Author.objects.all()
@@ -28,6 +39,8 @@ A sample model view;
 
 
 A sample model viewset;
+
+.. code-block:: bash
 
     class AuthorViewSet(ExportViewSet):
         queryset = Author.objects.all()
@@ -37,6 +50,8 @@ A sample model viewset;
 To override or limit the renderers allowed, add ``EXPORT_RENDERERS`` to settings.
 The current default is;
 
+.. code-block:: bash
+
     EXPORT_RENDERERS = (
         "unicef_rest_export.renderers.ExportHTMLRenderer",
         "unicef_rest_export.renderers.ExportCSVRenderer",
@@ -45,6 +60,8 @@ The current default is;
     )
 
 The following is a sample of transforming data;
+
+.. code-block:: bash
 
     class AuthorTransformView(ExportView):
         queryset = Author.objects.all()
@@ -58,39 +75,50 @@ The following is a sample of transforming data;
             return dataset
 
 
-## Contributing
+Contributing
+------------
 
-### Environment Setup
+Environment Setup
+~~~~~~~~~~~~~~~~~
 
 To install the necessary libraries
+
+.. code-block:: bash
 
     $ make install
 
 
-### Coding Standards
-
+Coding Standards
+~~~~~~~~~~~~~~~~
 See [PEP 8 Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/) for complete details on the coding standards.
 
 To run checks on the code to ensure code is in compliance
 
+.. code-block:: bash
+
     $ make lint
 
 
-### Testing
+Testing
+~~~~~~~
 
 Testing is important and tests are located in `tests/` directory and can be run with;
+
+.. code-block:: bash
 
     $ make test
 
 Coverage report is viewable in `build/coverage` directory, and can be generated with;
 
 
-### Project Links
+Project Links
+~~~~~~~~~~~~~
 
  - Continuos Integration - https://circleci.com/gh/unicef/unicef-rest-export/tree/develop
  - Source Code - https://github.com/unicef/unicef-rest-export
 
 
-## Thanks to
+Thanks to
+---------
 
 [django-rest-pandas](https://github.com/wq/django-rest-pandas) as a lot of the code was borrowed from that package.
