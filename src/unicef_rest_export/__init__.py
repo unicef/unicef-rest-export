@@ -1,3 +1,3 @@
 NAME = 'unicef_rest_export'
-VERSION = __version__ = "0.6"
+VERSION = __version__ = "0.8"
 __author__ = 'UNICEF'
