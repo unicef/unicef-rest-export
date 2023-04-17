@@ -3,15 +3,10 @@ import ast
 import codecs
 import os.path
 import re
-import subprocess
 import sys
 from codecs import open
-from distutils import log
-from distutils.errors import DistutilsError
 
 from setuptools import find_packages, setup
-from setuptools.command.install import install
-from setuptools.command.sdist import sdist as BaseSDistCommand
 
 ROOT = os.path.realpath(os.path.dirname(__file__))
 init = os.path.join(ROOT, 'src', 'unicef_rest_export', '__init__.py')
@@ -53,6 +48,7 @@ setup(
     ),
     extras_require={
         'test': (
+            'black',
             'coverage',
             'factory-boy',
             'faker',
@@ -69,10 +65,10 @@ setup(
     classifiers=[
         'Environment :: Web Environment',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.11',
         'Framework :: Django',
         'Framework :: Django :: 3.2',
-        'Framework :: Django :: 4.0',
-        'Framework :: Django :: 4.1',
+        'Framework :: Django :: 4.2',
         'Intended Audience :: Developers'],
     scripts=[],
 )

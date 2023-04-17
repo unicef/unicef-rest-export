@@ -12,7 +12,7 @@ from demo.sample.models import Author, Book
 class AuthorNormalView(ExportMixin, ListAPIView):
     queryset = Author.objects.all()
     serializer_class = serializers.AuthorSerializer
-    renderer_classes = (JSONRenderer, )
+    renderer_classes = (JSONRenderer,)
 
 
 class AuthorView(ExportView):
@@ -65,4 +65,7 @@ class BookCSVView(ExportModelView):
     queryset = Book.objects.all()
     serializer_class = serializers.BookSerializer
 
-    renderer_classes = (JSONRenderer, FriendlyCSVRenderer, )
+    renderer_classes = (
+        JSONRenderer,
+        FriendlyCSVRenderer,
+    )

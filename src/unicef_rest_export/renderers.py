@@ -13,10 +13,7 @@ from rest_framework.renderers import BaseRenderer, TemplateHTMLRenderer
 from rest_framework_csv.renderers import CSVRenderer
 from tablib import Dataset
 
-RESPONSE_ERROR = (
-    "Response data is a %s, not a Dataset! "
-    "Did you extend ExportMixin?"
-)
+RESPONSE_ERROR = "Response data is a %s, not a Dataset! " "Did you extend ExportMixin?"
 PDF_COLUMNS_PER_PAGE = 9
 
 
@@ -25,16 +22,15 @@ class ExportBaseRenderer(BaseRenderer):
     Only works with serializers that return Datasets as their data object.
     Uses a StringIO to capture the output of dataset.export('[format]')
     """
+
     def render(self, data, accepted_media_type=None, renderer_context=None):
-        if 'response' in renderer_context:
-            status_code = renderer_context['response'].status_code
+        if "response" in renderer_context:
+            status_code = renderer_context["response"].status_code
             if not status.is_success(status_code):
-                return "Error: %s" % data.get('detail', status_code)
+                return "Error: %s" % data.get("detail", status_code)
 
         if not isinstance(data, Dataset):
-            raise Exception(
-                RESPONSE_ERROR % type(data).__name__
-            )
+            raise Exception(RESPONSE_ERROR % type(data).__name__)
 
         self.init_output()
         args = self.get_export_args(data)
@@ -62,8 +58,9 @@ class ExportFileRenderer(ExportBaseRenderer):
     """Renderer for output formats that absolutely must use a file
     (i.e. Excel)
     """
+
     def init_output(self):
-        file, filename = mkstemp(suffix='.' + self.format)
+        file, filename = mkstemp(suffix="." + self.format)
         self.filename = filename
         os.close(file)
 
@@ -75,7 +72,7 @@ class ExportFileRenderer(ExportBaseRenderer):
         return [self.filename]
 
     def get_output(self):
-        file = open(self.filename, 'rb')
+        file = open(self.filename, "rb")
         result = file.read()
         file.close()
         os.unlink(self.filename)
@@ -88,37 +85,41 @@ class ExportHTMLRenderer(TemplateHTMLRenderer, ExportBaseRenderer):
 
     def render(self, data, accepted_media_type=None, renderer_context=None):
         table = ExportBaseRenderer.render(
-            self, data, accepted_media_type, renderer_context,
+            self,
+            data,
+            accepted_media_type,
+            renderer_context,
         )
 
         return TemplateHTMLRenderer.render(
-            self, {'table': table}, accepted_media_type, renderer_context,
+            self,
+            {"table": table},
+            accepted_media_type,
+            renderer_context,
         )
 
     def get_template_context(self, data, renderer_context):
-        view = renderer_context['view']
-        request = renderer_context['request']
+        view = renderer_context["view"]
+        request = renderer_context["request"]
 
-        data['name'] = view.get_view_name()
-        data['description'] = view.get_view_description(html=True)
-        data['url'] = request.path.replace('.html', '')
+        data["name"] = view.get_view_name()
+        data["description"] = view.get_view_description(html=True)
+        data["url"] = request.path.replace(".html", "")
         full_path = request.get_full_path()
-        if '?' in full_path:
-            data['url_params'] = full_path[full_path.index('?'):]
-        data['available_formats'] = [
-            cls.format for cls in view.renderer_classes
-            if cls.format != 'html'
-        ]
+        if "?" in full_path:
+            fr = full_path.index("?")
+            data["url_params"] = full_path[fr:]
+        data["available_formats"] = [cls.format for cls in view.renderer_classes if cls.format != "html"]
 
-        if hasattr(view, 'get_template_context'):
+        if hasattr(view, "get_template_context"):
             data.update(view.get_template_context(data))
 
         return data
 
     def get_export_kwargs(self, data, renderer_context):
         return {
-            'classes': 'ui-table table-stripe',
-            'na_rep': '',
+            "classes": "ui-table table-stripe",
+            "na_rep": "",
         }
 
 
@@ -126,47 +127,52 @@ class ExportCSVRenderer(ExportBaseRenderer):
     """
     Renders data frame as CSV
     """
+
     media_type = "text/csv"
     format = "csv"
 
     def get_export_kwargs(self, data, renderer_context):
-        return {'encoding': self.charset}
+        return {"encoding": self.charset}
 
 
 class ExportJSONRenderer(ExportBaseRenderer):
     """Renders dataset as JSON"""
+
     media_type = "application/json"
     format = "json"
 
-    date_format_choices = {'epoch', 'iso'}
-    default_date_format = 'iso'
+    date_format_choices = {"epoch", "iso"}
+    default_date_format = "iso"
 
     def get_export_kwargs(self, data, renderer_context):
-        request = renderer_context['request']
+        request = renderer_context["request"]
 
-        date_format = request.GET.get('date_format', '')
+        date_format = request.GET.get("date_format", "")
         if date_format not in self.date_format_choices:
             date_format = self.default_date_format
 
         return {
-            'date_format': date_format,
+            "date_format": date_format,
         }
 
 
 class ExportOpenXMLRenderer(ExportFileRenderer):
     """Renders dataset as Excel (.xlsx)"""
+
     media_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  # noqa
     format = "xlsx"
 
 
 class ExportExcelRenderer(ExportFileRenderer):
     """Renders dataset as Excel (.xls)"""
+
     media_type = "application/vnd.ms-excel"
     format = "xls"
 
 
 class ExportPDFTableRenderer(ExportFileRenderer):
     """Renders dataset as PDF (.pdf) in table format"""
+
     media_type = "application/pdf"
     format = "pdf_table"
 
@@ -183,27 +189,25 @@ class ExportPDFTableRenderer(ExportFileRenderer):
             # in order to fit on the page
             for start in range(0, len(headers), columns_per_page):
                 end = start + columns_per_page
-                data = [['Row'] + [
-                    item if item is not None else ''
-                    for item in headers[start:end]
-                ]]
+                data = [["Row"] + [item if item is not None else "" for item in headers[start:end]]]
 
                 row_num = 1
                 for row in formatted:
-                    d = [
-                        Paragraph(str(v), styleCell)
-                        for _, v in row.items()
-                    ]
+                    d = [Paragraph(str(v), styleCell) for _, v in row.items()]
                     data.append([row_num] + d[start:end])
                     row_num += 1
 
                 t = Table(data)
-                t.setStyle(TableStyle([
-                    # action/format, from-cell, to-cell, format
-                    ('VALIGN', (0, 0), (-1, -1), "TOP"),
-                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-                ]))
+                t.setStyle(
+                    TableStyle(
+                        [
+                            # action/format, from-cell, to-cell, format
+                            ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                            ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.black),
+                            ("BOX", (0, 0), (-1, -1), 0.25, colors.black),
+                        ]
+                    )
+                )
                 elements.append(t)
                 elements.append(PageBreak())
 
@@ -218,11 +222,8 @@ class ExportPDFTableRenderer(ExportFileRenderer):
         styleCell.fontSize = 7
         elements = [
             Paragraph(
-                (
-                    "Data not able to be formatted for PDF, "
-                    "please try another format."
-                ),
-                styleCell
+                ("Data not able to be formatted for PDF, " "please try another format."),
+                styleCell,
             )
         ]
         doc.build(elements)
@@ -236,9 +237,7 @@ class ExportPDFTableRenderer(ExportFileRenderer):
             success = False
             while columns_per_page > 1:
                 try:
-                    fp.write(
-                        self.export_set(formatted, headers, columns_per_page)
-                    )
+                    fp.write(self.export_set(formatted, headers, columns_per_page))
                 except LayoutError:
                     columns_per_page -= 1
                 else:
@@ -250,6 +249,7 @@ class ExportPDFTableRenderer(ExportFileRenderer):
 
 class ExportPDFRenderer(ExportFileRenderer):
     """Renders dataset as PDF (.pdf)"""
+
     media_type = "application/pdf"
     format = "pdf"
 
@@ -283,6 +283,7 @@ class ExportDocxBaseRenderer(ExportFileRenderer):
 
 class ExportDocxRenderer(ExportDocxBaseRenderer):
     """Renders dataset as Doc (.docx)"""
+
     format = "docx"
 
     def export_set(self, formatted):
@@ -308,6 +309,7 @@ class ExportDocxRenderer(ExportDocxBaseRenderer):
 
 class ExportDocxTableRenderer(ExportDocxBaseRenderer):
     """Renders dataset as Doc (.docx) in table format"""
+
     format = "docx_table"
 
     def export_set(self, formatted, headers):
@@ -343,5 +345,5 @@ class ExportDocxTableRenderer(ExportDocxBaseRenderer):
 class FriendlyCSVRenderer(CSVRenderer):
     def flatten_item(self, item):
         if isinstance(item, bool):
-            return {'': {True: 'Yes', False: ''}[item]}
+            return {"": {True: "Yes", False: ""}[item]}
         return super().flatten_item(item)

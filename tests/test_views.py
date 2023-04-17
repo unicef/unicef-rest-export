@@ -71,9 +71,7 @@ def test_view_retrieve(api_client, book):
 
 
 def test_export_view_retrieve_xls(api_client, book):
-    url = "{}?format=xls".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=xls".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -91,9 +89,7 @@ def test_export_view_list_xlsx(api_client, author):
 
 
 def test_export_view_retrieve_xlsx(api_client, book):
-    url = "{}?format=xlsx".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=xlsx".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -111,9 +107,7 @@ def test_export_view_list_csv(api_client, author):
 
 
 def test_export_view_retrieve_csv(api_client, book):
-    url = "{}?format=csv".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=csv".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -149,9 +143,7 @@ def test_export_view_list_pdf(api_client, author):
 
 
 def test_export_view_retrieve_pdf(api_client, book):
-    url = "{}?format=pdf".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=pdf".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -163,9 +155,7 @@ def test_export_view_list_pdf_table(api_client, author):
 
 
 def test_export_view_retrieve_pdf_table(api_client, book):
-    url = "{}?format=pdf_table".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=pdf_table".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -183,17 +173,13 @@ def test_export_view_list_docx_table(api_client, author):
 
 
 def test_export_view_retrieve_docx(api_client, book):
-    url = "{}?format=docx".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=docx".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
 
 def test_export_view_retrieve_docx_table(api_client, book):
-    url = "{}?format=docx_table".format(
-        reverse("sample:book-detail", args=[book.pk])
-    )
+    url = "{}?format=docx_table".format(reverse("sample:book-detail", args=[book.pk]))
     response = api_client.get(url)
     assert response.status_code == 200
 
@@ -370,15 +356,15 @@ def test_export_view_list_get_template_context(api_client, author):
 @pytest.mark.django_db
 def test_export_model_view():
     user = UserFactory(is_superuser=True)
-    BookFactory(name='demo')
-    BookFactory(name='test')
+    BookFactory(name="demo")
+    BookFactory(name="test")
 
     client = APIClient()
     client.force_authenticate(user=user)
 
-    url = reverse('sample:author-list') + '?format=csv'
-    response = client.get(url, format='json')
+    url = reverse("sample:author-list") + "?format=csv"
+    response = client.get(url, format="json")
 
-    dataset = Dataset().load(response.content.decode('utf-8'), 'csv')
+    dataset = Dataset().load(response.content.decode("utf-8"), "csv")
     assert len(dataset._get_headers()) == 4
-    assert dataset.headers == ['ID', 'Books', 'First name', 'Last name']
+    assert dataset.headers == ["ID", "Books", "First name", "Last name"]

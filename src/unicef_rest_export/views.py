@@ -24,9 +24,7 @@ if EXPORT_RENDERERS is None:
     )
     if "unicef_rest_export" in settings.INSTALLED_APPS:
         DEFAULT_TEMPLATE = True
-        EXPORT_RENDERERS = (
-            "unicef_rest_export.renderers.ExportHTMLRenderer",
-        ) + EXPORT_RENDERERS
+        EXPORT_RENDERERS = ("unicef_rest_export.renderers.ExportHTMLRenderer",) + EXPORT_RENDERERS
 
 EXPORT_RENDERERS = perform_import(EXPORT_RENDERERS, "EXPORT_RENDERERS")
 
@@ -35,8 +33,8 @@ class ExportMixin:
     export_serializer_class = ExportSerializer
 
     def with_list_serializer(self, cls, export_serializer_class=None):
-        meta = getattr(cls, 'Meta', object)
-        if getattr(meta, 'list_serializer_class', None):
+        meta = getattr(cls, "Meta", object)
+        if getattr(meta, "list_serializer_class", None):
             return cls
 
         class SerializerWithListSerializer(cls):
@@ -50,8 +48,7 @@ class ExportMixin:
         # (not using super() since this is a mixin class)
         assert self.serializer_class is not None, (
             "'%s' should either include a `serializer_class` attribute, "
-            "or override the `get_serializer_class()` method."
-            % self.__class__.__name__
+            "or override the `get_serializer_class()` method." % self.__class__.__name__
         )
 
         renderer = self.request.accepted_renderer
@@ -89,16 +86,18 @@ class ExportViewBase(ExportMixin):
     renderer_classes = EXPORT_RENDERERS
     pagination_class = None
     if DEFAULT_TEMPLATE:
-        template_name = 'rest_export.html'
+        template_name = "rest_export.html"
 
 
 class ExportView(ExportViewBase, ListAPIView):
     """Export-capable model list view"""
+
     pass
 
 
 class ExportViewSet(ExportViewBase, ListModelMixin, GenericViewSet):
     """Export-capable model ViewSet (list only)"""
+
     pass
 
 
@@ -127,8 +126,5 @@ class ExportModelView(ListAPIView):
             serializer = serializer_class()
             serializer_fields = serializer.get_fields()
             model = getattr(serializer.Meta, "model")
-            context["labels"] = self.set_labels(
-                serializer_fields,
-                model
-            )
+            context["labels"] = self.set_labels(serializer_fields, model)
         return context

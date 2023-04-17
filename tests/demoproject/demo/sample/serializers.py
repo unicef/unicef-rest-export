@@ -7,7 +7,10 @@ from demo.sample.models import Author, Book
 
 class BookListSerializer(ExportSerializer):
     class Meta:
-        fields = ("id", "name",)
+        fields = (
+            "id",
+            "name",
+        )
 
 
 class BookSerializer(serializers.ModelSerializer):

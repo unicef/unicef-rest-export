@@ -39,4 +39,5 @@ def books():
     class BookFactory:
         def get(self):
             return factories.BookFactory()
+
     return BookFactory()

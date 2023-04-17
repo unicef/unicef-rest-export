@@ -5,6 +5,7 @@ from tablib import Dataset
 
 class ExportSerializer(serializers.ListSerializer):
     """Transforms data into a dataset"""
+
     read_only = True
 
     def get_header_label(self, field):
@@ -29,9 +30,9 @@ class ExportSerializer(serializers.ListSerializer):
         return dataset
 
     def transform_dataset(self, dataset):
-        view = self.context.get('view', None)
-        if view and hasattr(view, 'transform_dataset'):
-            return self.context['view'].transform_dataset(dataset)
+        view = self.context.get("view", None)
+        if view and hasattr(view, "transform_dataset"):
+            return self.context["view"].transform_dataset(dataset)
         return dataset
 
     @property
@@ -45,12 +46,11 @@ class ExportSerializer(serializers.ListSerializer):
 
 
 class XLSXExportSerializer(ExportSerializer):
-
     def get_dataset(self, data):
         headers = self.get_headers(data)
         data_list = []
         for d in data:
-            data_list.append([ILLEGAL_CHARACTERS_RE.sub('', v) if isinstance(v, str) else v for _, v in d.items()])
+            data_list.append([ILLEGAL_CHARACTERS_RE.sub("", v) if isinstance(v, str) else v for _, v in d.items()])
 
         dataset = Dataset(*data_list, headers=headers)
         return dataset

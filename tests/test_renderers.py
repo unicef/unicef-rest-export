@@ -16,8 +16,8 @@ def test_friendly_renderer():
 
     client = APIClient()
     client.force_authenticate(user=user)
-    response = client.get(reverse('sample:book-csv-view') + '?format=csv')
-    dataset = Dataset().load(response.content.decode('utf-8'), 'csv')
+    response = client.get(reverse("sample:book-csv-view") + "?format=csv")
+    dataset = Dataset().load(response.content.decode("utf-8"), "csv")
     assert len(dataset._get_headers()) == 4
-    assert dataset[0][2] == ''
-    assert dataset[1][2] == 'Yes'
+    assert dataset[0][2] == ""
+    assert dataset[1][2] == "Yes"
