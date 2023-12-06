@@ -33,32 +33,7 @@ dependencies = [
     "tablib[html,xlsx,xls]",
     "xlrd",
     "xlwt",
-]
-
-[project.optional-dependencies]
-test = [
-    "black",
-    "coverage",
-    "factory-boy",
-    "faker",
-    "flake8",
-    "isort",
-    "psycopg2",
-    "pytest",
-    "pytest-cov",
-    "pytest-django",
-    "pytest-echo",
-]
-
-[project.urls]
-Homepage = "https://github.com/unicef/unicef-rest-export"
-
-[tool.hatch.version]
-path = "unicef_rest_export/__init__.py"
-
-[tool.hatch.build.targets.sdist]
-include = [
-    "/src",
+    "setuptools"  # temporary for python 3.12
 ]
 
 [project.optional-dependencies]
